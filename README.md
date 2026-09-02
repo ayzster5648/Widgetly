@@ -2,10 +2,6 @@
 
 A customizable widget board for students — warm cream/taupe aesthetic, drag-and-drop widgets, everything saved in your browser.
 
-## How to open it
-Just **double-click `index.html`** — it runs in any browser, no install needed.
-(Optional: to run it on a local web server instead, run `node serve.js` and open `http://localhost:5599`. This is only needed if your browser blocks something on `file://`.)
-
 ## Using the board
 - **✎ Edit Layout** — turn on edit mode, then **drag a widget by its top bar** to move it and **drag the bottom-right corner** to resize. Widgets **push each other out of the way and never overlap**, and float up to fill gaps. **✕** removes a widget, **⚙** opens its options.
 - **Focus Timer ⚙** — click the gear on the timer to set focus/session, short break, long break minutes, sessions before a long break, and the countdown timer length (works without edit mode).
