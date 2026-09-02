@@ -2,6 +2,10 @@
 
 A customizable widget board for students — warm cream/taupe aesthetic, drag-and-drop widgets, everything saved in your browser.
 
+## How to open it
+Just **double-click `index.html`** — it runs in any browser, no install needed.
+(Optional: to run it on a local web server instead, run `node serve.js` and open `http://localhost:5599`. This is only needed if your browser blocks something on `file://`.)
+
 ## Using the board
 - **✎ Edit Layout** — turn on edit mode, then **drag a widget by its top bar** to move it and **drag the bottom-right corner** to resize. Widgets **push each other out of the way and never overlap**, and float up to fill gaps. **✕** removes a widget, **⚙** opens its options.
 - **Focus Timer ⚙** — click the gear on the timer to set focus/session, short break, long break minutes, sessions before a long break, and the countdown timer length (works without edit mode).
@@ -50,7 +54,8 @@ Then open **http://127.0.0.1:5599** (use `127.0.0.1`, not `localhost` — Spotif
 1. In the Spotify widget click **🎧 Log in & import my playlists**.
 2. First time only, it walks you through: open **developer.spotify.com/dashboard** → **Create app** → set **Redirect URI** to exactly `http://127.0.0.1:5599/` → tick **Web API** → copy the **Client ID** into the dashboard.
 3. Log in on Spotify's page → your saved playlists are imported into the widget. Click one to play it.
-- *Browsing* your playlists works on any account. *Full in-page playback* needs **Spotify Premium** (otherwise you get the embed player / 30-second previews). You can still paste playlist links anytime.
+- **Important (Spotify policy):** as of 2025 Spotify **requires Spotify Premium to use the Web API**, which is what the playlist import uses. On a **free account** the import is blocked by Spotify (you'll see "blocked from accessing the Web API… upgrade to Premium"). This is Spotify's rule, not the dashboard's.
+- **Free-account way (no login, no setup):** in Spotify open a playlist → **⋯ / right-click → Share → Copy link**, and paste it into the widget's box. It embeds the real player and works for everyone. This is the recommended path unless you have Premium.
 
 ### Google Classroom (pull your real to-do assignments)
 1. In the Assignments widget click **🎓 Connect Google Classroom**.

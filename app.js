@@ -1115,7 +1115,7 @@ function randStr(n){ const a=new Uint8Array(n); crypto.getRandomValues(a); retur
 async function sha256b64url(s){ const h=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return btoa(String.fromCharCode(...new Uint8Array(h))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
 
 /* ---------- SPOTIFY ---------- */
-const SP_REDIRECT = location.origin + '/';
+const SP_REDIRECT = location.origin + location.pathname;   // full page URL incl. subpath (e.g. /Widgetly/)
 const SP_SCOPES = 'playlist-read-private playlist-read-collaborative';
 function spClientId(){ return localStorage.getItem('sd.spClientId')||''; }
 function spTok(){ try{ return JSON.parse(localStorage.getItem('sd.spTok')||'null'); }catch(e){ return null; } }
@@ -1125,7 +1125,8 @@ function spotifyDisconnect(){ localStorage.removeItem('sd.spTok'); }
 
 function spotifySetup(after){
   modal('Connect Spotify — one-time setup', `
-    <p style="font-weight:600;color:var(--ink-soft);line-height:1.5;font-size:13px">Do this once to let the dashboard read <b>your</b> playlists:</p>
+    <p style="font-weight:700;color:var(--danger);line-height:1.45;font-size:12.5px">Heads-up: Spotify now requires <b>Spotify Premium</b> to use its Web API, so importing playlists only works on a Premium account. On a free account, paste playlist links instead (Share → Copy link).</p>
+    <p style="font-weight:600;color:var(--ink-soft);line-height:1.5;font-size:13px">To connect (Premium accounts):</p>
     <ol style="font-size:13px;line-height:1.6;padding-left:18px;font-weight:500">
       <li>Open <b>developer.spotify.com/dashboard</b> → log in → <b>Create app</b>.</li>
       <li>Any name. For <b>Redirect URI</b> paste exactly:<br><code style="background:var(--card-2);padding:2px 6px;border-radius:6px">${esc(SP_REDIRECT)}</code></li>
@@ -1160,12 +1161,15 @@ async function spToken(){ const t=spTok(); if(!t) return null; if(Date.now()<t.e
   if(!t.refresh_token) return null;
   try{ const body=new URLSearchParams({ client_id:spClientId(), grant_type:'refresh_token', refresh_token:t.refresh_token }); const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}); const j=await r.json(); if(j.access_token){ saveSpTok(j); return j.access_token; } }catch(e){} return null; }
 async function spFetchPlaylists(){ const tok=await spToken(); if(!tok) return null; const out=[]; let url='https://api.spotify.com/v1/me/playlists?limit=50';
-  try{ while(url){ const r=await fetch(url,{headers:{Authorization:'Bearer '+tok}}); if(!r.ok) break; const j=await r.json(); (j.items||[]).forEach(p=>{ if(p&&p.external_urls&&p.external_urls.spotify) out.push({name:p.name, url:p.external_urls.spotify}); }); url=j.next; } }catch(e){} return out; }
+  try{ while(url){ const r=await fetch(url,{headers:{Authorization:'Bearer '+tok}});
+    if(r.status===403) return 'premium';   // Spotify blocks Web API for non-Premium accounts
+    if(!r.ok) break; const j=await r.json(); (j.items||[]).forEach(p=>{ if(p&&p.external_urls&&p.external_urls.spotify) out.push({name:p.name, url:p.external_urls.spotify}); }); url=j.next; } }catch(e){} return out; }
 function mergePlaylists(wd,list){ wd.data.playlists=wd.data.playlists||[]; const seen=new Set(wd.data.playlists.map(p=>p.url)); (list||[]).forEach(p=>{ if(!seen.has(p.url)){ wd.data.playlists.push(p); seen.add(p.url); } }); }
 async function spotifyClick(wd,body){
   if(!servedOverHttp()) return needServerAlert();
   if(!spClientId()) return spotifySetup();
   const list=await spFetchPlaylists();
+  if(list==='premium'){ alert("Spotify now requires Spotify Premium to use its Web API, so importing your playlists is blocked on a free account — that's Spotify's rule, not the dashboard's.\n\nYou can still use your playlists for free: in Spotify open a playlist → ⋯ (or right-click) → Share → Copy link, then paste it in the box below. It embeds the real player."); return; }
   if(list===null){ spotifyConnect(); return; }   // no/expired token → log in
   mergePlaylists(wd,list); wd.data.spConnected=true; save(); RENDER.spotify(body,wd);
   alert('Imported '+list.length+' playlist'+(list.length===1?'':'s')+' from your Spotify.');
