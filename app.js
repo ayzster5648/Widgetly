@@ -38,6 +38,8 @@ const CATALOG = {
   sounds:{name:'Study Sounds',icon:'🎧',w:7,h:6,minW:4,minH:4},
   journal:{name:'Journal & Mood',icon:'📔',w:5,h:6,minW:4,minH:5},
   gmail:{name:'Gmail',icon:'✉️',w:5,h:6,minW:4,minH:4},
+  clubs:{name:'Clubs & Events',icon:'🎪',w:5,h:6,minW:4,minH:4},
+  docs:{name:'Docs',icon:'📄',w:6,h:7,minW:4,minH:5},
 };
 
 /* ---------- Themed line icons (accent-coloured, replace emojis) ---------- */
@@ -63,8 +65,42 @@ const ICONS={
   journal:'<path d="M6 3.5A1.5 1.5 0 0 1 7.5 2H19a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H7.5A1.5 1.5 0 0 0 6 21.5z"/><path d="M6 20.5A1.5 1.5 0 0 1 7.5 19H20"/><path d="M10 2v7l2-1.4L14 9V2"/>',
   gmail:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 5.5L20 7"/>',
   powerschool:'<path d="M12 4L2.5 9 12 14l9.5-5z"/><path d="M6.5 11.5v4.2c0 1.2 2.5 2.8 5.5 2.8s5.5-1.6 5.5-2.8v-4.2"/>',
+  clubs:'<circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M15.5 5.3a3.2 3.2 0 0 1 0 6"/><path d="M17.5 20a5.5 5.5 0 0 0-3-4.9"/>',
+  docs:'<path d="M6 2.5h7.5L19 8v12.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1z"/><path d="M13 2.5V8h6"/><path d="M8.5 12.5h7M8.5 16h7"/>',
 };
 function icon(t){ return `<svg class="wic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[t]||ICONS.notes}</svg>`; }
+function svgi(paths,cls){ return `<svg class="${cls||'gic'}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`; }
+const GEARP='<circle cx="12" cy="12" r="3"/><path d="M19.4 13a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.2A1.6 1.6 0 0 0 7 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 4.6 14H4a2 2 0 0 1 0-4h.2A1.6 1.6 0 0 0 6 7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 11 4.6V4a2 2 0 0 1 4 0v.2A1.6 1.6 0 0 0 17 6l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 19.4 11z"/>';
+function gearIcon(){ return svgi(GEARP,'gic'); }
+/* weather picture from WMO code */
+function wIcon(code){
+  const P={ sun:'<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/>',
+    partly:'<circle cx="8" cy="8" r="3"/><path d="M8 2.5V4M2.5 8H4M12 8h1M4.4 4.4l1 1M11.6 4.4l-1 1"/><path d="M17 20a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.6 1.3A3.2 3.2 0 0 0 8 20z"/>',
+    cloud:'<path d="M17.5 19a4 4 0 0 0 0-8 6 6 0 0 0-11.6 1.6A3.5 3.5 0 0 0 6.5 19z"/>',
+    rain:'<path d="M17.5 15a4 4 0 0 0 0-8 6 6 0 0 0-11.6 1.6A3.5 3.5 0 0 0 6.5 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/>',
+    snow:'<path d="M17.5 14a4 4 0 0 0 0-8 6 6 0 0 0-11.6 1.6A3.5 3.5 0 0 0 6.5 14z"/><path d="M8 18h.01M12 19h.01M16 18h.01M10 21h.01M14 21h.01"/>',
+    storm:'<path d="M17.5 14a4 4 0 0 0 0-8 6 6 0 0 0-11.6 1.6A3.5 3.5 0 0 0 6.5 14z"/><path d="M12 12.5l-2 4h3l-2 4"/>',
+    fog:'<path d="M17.5 13a4 4 0 0 0 0-8 6 6 0 0 0-11.6 1.6A3.5 3.5 0 0 0 6.5 13z"/><path d="M5 17h14M7 20h10"/>' };
+  let k='cloud';
+  if(code===0) k='sun'; else if(code===1||code===2) k='partly'; else if([45,48].includes(code)) k='fog';
+  else if([71,73,75,77,85,86].includes(code)) k='snow'; else if([95,96,99].includes(code)) k='storm';
+  else if([51,53,55,61,63,65,66,67,80,81,82].includes(code)) k='rain';
+  return svgi(P[k],'weather-svg');
+}
+/* mood face from 1-5 */
+function moodSvg(v){ const m={1:'M8.5 16.8c1.3-2 5.7-2 7 0',2:'M9 16c1-1 5-1 6 0',3:'M9 15.5h6',4:'M9 15c1 1 5 1 6 0',5:'M8.5 14.5c1.3 2 5.7 2 7 0'};
+  return `<svg class="mf-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/><path d="${m[v]||m[3]}"/></svg>`; }
+const SND_ICON={
+  rain:'<path d="M17.5 13a4 4 0 0 0 0-8 6 6 0 0 0-11.6 1.6A3.5 3.5 0 0 0 6.5 13z"/><path d="M8 16l-1 2.5M12 16l-1 2.5M16 16l-1 2.5"/>',
+  ocean:'<path d="M2 8c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 13c2-2 4-2 6 0s4 2 6 0 4-2 6 0M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>',
+  wind:'<path d="M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h9a2.5 2.5 0 1 1-2.5 2.5"/>',
+  forest:'<path d="M12 2L6 11h3l-4 6h14l-4-6h3z"/><path d="M12 17v5"/>',
+  fire:'<path d="M12 3s4.5 3.2 4.5 8a4.5 4.5 0 0 1-9 0c0-1.5.6-2.6.6-2.6s.4 1.6 1.7 1.6c1.6 0 1-3.4 2.2-7z"/>',
+  coffee:'<path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M7 2.5v2M11 2.5v2"/>',
+  brown:'<path d="M4 9v6h3l4 4V5L7 9z"/><path d="M15.5 9a4 4 0 0 1 0 6"/>',
+  white:'<path d="M4 9v6h3l4 4V5L7 9z"/><path d="M15.5 9a4 4 0 0 1 0 6"/>',
+  pink:'<path d="M4 9v6h3l4 4V5L7 9z"/><path d="M15.5 9a4 4 0 0 1 0 6"/>',
+};
 
 /* ============================================================ STATE */
 let state = load() || defaultState();
@@ -94,6 +130,8 @@ function defaultState(){
     w('alarm',   8, 23, 4, 5, seedAlarms()),
     w('journal', 0, 29, 4, 6, seedJournal()),
     w('sounds',  4, 29, 8, 6, seedSounds()),
+    w('clubs',   0, 35, 4, 6, seedClubs()),
+    w('docs',    4, 35, 8, 7, seedDocs()),
   ]};
 }
 function w(type,x,y,ww,h,data){ return {id:uid(),type,x,y,w:ww,h,data:data||{}}; }
@@ -164,6 +202,11 @@ function seedQuotes(){ return {idx:0, auto:true, list:[
   'One day or day one — you decide.',
 ]}; }
 function seedJournal(){ return { entries:{}, trackers:[{id:uid(),name:'Rate your day'}] }; }
+function seedClubs(){ return { items:[
+  {id:uid(),name:'Robotics Club',when:'Wed · 3:30 PM',location:'Room 204',notes:''},
+  {id:uid(),name:'Student Council',when:'Fri · lunch',location:'Cafeteria',notes:''},
+]}; }
+function seedDocs(){ const id=uid(); return { docs:[{id,title:'Untitled doc',html:'',updated:Date.now()}], active:id }; }
 function seedAlarms(){ return {items:[
   {id:uid(),time:'07:00',label:'Wake up',on:false},
   {id:uid(),time:'21:30',label:'Start winding down',on:false},
@@ -176,7 +219,9 @@ function seedGrades(){ return {quarter:'all', classes:[
 ]}; }
 
 /* ============================================================ PERSIST */
-function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+let fb={app:null,auth:null,db:null,user:null}; let fbTimer;
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+  if(fb.user){ clearTimeout(fbTimer); fbTimer=setTimeout(fbPush,1500); } }
 function load(){
   try{
     let s=localStorage.getItem(STORE_KEY);
@@ -280,7 +325,7 @@ function buildWidget(wd){
   const meta=CATALOG[wd.type];
   const el=document.createElement('section'); el.className='widget'; el.dataset.id=wd.id;
   const head=document.createElement('div'); head.className='w-head';
-  head.innerHTML=`<span class="w-title">${icon(wd.type)} ${meta.name}</span><span class="w-actions"><button data-act="settings" title="Options">⚙</button><button data-act="remove" title="Remove">✕</button></span>`;
+  head.innerHTML=`<span class="w-title">${icon(wd.type)} ${meta.name}</span><span class="w-actions"><button data-act="settings" title="Options">${gearIcon()}</button><button data-act="remove" title="Remove">✕</button></span>`;
   el.appendChild(head);
   const body=document.createElement('div'); body.className='w-body'; el.appendChild(body);
   const rz=document.createElement('div'); rz.className='resize-handle'; el.appendChild(rz);
@@ -335,7 +380,7 @@ function enableResize(handle,el,wd){
 function addWidget(type){
   const meta=CATALOG[type];
   let maxY=0; state.widgets.forEach(x=> maxY=Math.max(maxY,x.y+x.h));
-  const seed=({todo:seedTodos,spotify:seedSpotify,assign:seedAssign,calendar:seedEvents,goals:seedGoals,habits:seedHabits,grades:seedGrades,tests:seedTests,schedule:seedSchedule,reminders:seedReminders,quotes:seedQuotes,alarm:seedAlarms,sounds:seedSounds,journal:seedJournal})[type];
+  const seed=({todo:seedTodos,spotify:seedSpotify,assign:seedAssign,calendar:seedEvents,goals:seedGoals,habits:seedHabits,grades:seedGrades,tests:seedTests,schedule:seedSchedule,reminders:seedReminders,quotes:seedQuotes,alarm:seedAlarms,sounds:seedSounds,journal:seedJournal,clubs:seedClubs,docs:seedDocs})[type];
   const wid=w(type,0,maxY,meta.w,meta.h, seed?seed():{});
   state.widgets.push(wid);
   compact(); save(); if(!editing) setEditing(true); renderBoard(); closeDrawer();
@@ -370,7 +415,7 @@ RENDER.timer=(body,wd)=>{
   d.workMin=d.workMin||25; d.breakMin=d.breakMin||5; d.longMin=d.longMin||15; d.rounds=d.rounds||4; d.timerMin=d.timerMin||5;
   const rt=runtime['tm'+wd.id]||(runtime['tm'+wd.id]={running:false,remain:d.workMin*60,elapsed:0,phase:'work',pomos:0,int:null});
   body.innerHTML=`
-    <div class="w-title-row"><div class="w-title-lg">${icon('timer')} Timer</div><button class="w-gear" data-c="gear" title="Timer settings">⚙</button></div>
+    <div class="w-title-row"><div class="w-title-lg">${icon('timer')} Timer</div><button class="w-gear" data-c="gear" title="Timer settings">${gearIcon()}</button></div>
     <div class="timer-tabs"><button data-m="pomodoro">POMODORO</button><button data-m="timer">TIMER</button><button data-m="stopwatch">STOPWATCH</button></div>
     <div class="timer-display" id="disp-${wd.id}">00:00</div>
     <div class="timer-controls"><button class="btn" data-c="start">START</button><button class="btn ghost" data-c="reset">RESET</button></div>
@@ -424,31 +469,48 @@ function timerSettings(wd){
 }
 function ding(){ try{ const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain(); o.connect(g); g.connect(a.destination); o.frequency.value=660; g.gain.setValueAtTime(.2,a.currentTime); o.start(); g.gain.exponentialRampToValueAtTime(.001,a.currentTime+.6); o.stop(a.currentTime+.6); }catch(e){} }
 
-/* ---------- TO-DO ---------- */
+/* ---------- TO-DO (lists/tabs, categories, links, files) ---------- */
+const ICON_LINK='<svg class="cic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg>';
+const ICON_CLIP='<svg class="cic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.5 8.5a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7l-8.5 8.5a1.7 1.7 0 0 1-2.4-2.4l7.8-7.8"/></svg>';
+function openFile(f){ if(!f)return; const win=window.open(); if(win) win.document.write(`<title>${esc(f.name)}</title><iframe src="${f.dataUrl}" style="border:none;width:100%;height:100vh"></iframe>`); }
 RENDER.todo=(body,wd)=>{
-  const d=wd.data; d.items=d.items||[];
-  body.innerHTML=`<div class="w-title-lg">${icon('todo')} To-Do List</div>
-    <div class="todo-add"><input id="ti-${wd.id}" placeholder="Add a task…"/><button class="btn" data-a="add">＋</button></div>
-    <ul class="todo-list" id="tl-${wd.id}"></ul>`;
-  const ul=body.querySelector('#tl-'+wd.id);
+  const d=wd.data; d.items=d.items||[]; d.lists=d.lists||[]; d.tab=d.tab||'all';
+  if(d.tab!=='all' && !d.lists.some(l=>l.id===d.tab)) d.tab='all';
+  const manageList=(id)=>{ const l=d.lists.find(x=>x.id===id); if(!l)return; const nm=prompt('Rename this list (or clear the box to delete it):', l.name); if(nm===null)return;
+    if(!nm.trim()){ d.items.forEach(i=>{ if(i.list===id) i.list=''; }); d.lists=d.lists.filter(x=>x.id!==id); if(d.tab===id)d.tab='all'; } else l.name=nm.trim(); save(); paint(); };
   const paint=()=>{
+    const tabs=[{id:'all',name:'All'},...d.lists];
+    body.innerHTML=`<div class="w-title-lg">${icon('todo')} To-Do List</div>
+      <div class="todo-tabs">${tabs.map(t=>`<button class="ttab ${d.tab===t.id?'active':''}" data-tab="${t.id}">${esc(t.name)}</button>`).join('')}<button class="ttab add" data-a="addlist" title="New list">+</button></div>
+      <div class="todo-add"><input id="ti-${wd.id}" placeholder="Add a task…"/><button class="btn" data-a="add">Add</button></div>
+      <ul class="todo-list" id="tl-${wd.id}"></ul>`;
+    const ul=body.querySelector('#tl-'+wd.id);
     const order={high:0,med:1,low:2};
-    const items=[...d.items].sort((a,b)=>(a.done-b.done)||(order[a.pri]-order[b.pri]));
-    ul.innerHTML=items.length? items.map(it=>{
-      const overdue=it.due&&!it.done&&it.due<isoIn(0);
+    let items=[...d.items]; if(d.tab!=='all') items=items.filter(i=>i.list===d.tab);
+    items.sort((a,b)=>(a.done-b.done)||(order[a.pri]-order[b.pri])||((a.due||'zz').localeCompare(b.due||'zz')));
+    ul.innerHTML=items.length? items.map(it=>{ const overdue=it.due&&!it.done&&it.due<isoIn(0); const lst=d.lists.find(l=>l.id===it.list);
       return `<li class="todo-item pri-${it.pri} ${it.done?'done':''}" data-id="${it.id}">
-        <div class="todo-check" data-a="toggle">${it.done?'✓':''}</div>
+        <button class="todo-check" data-a="toggle" aria-label="done"></button>
         <div class="todo-main"><div class="todo-text">${esc(it.text)}</div>
-          <div class="todo-tags"><span class="chip">${it.pri.toUpperCase()}</span>${it.due?`<span class="chip due ${overdue?'overdue':''}">📅 ${fmtDue(it.due)}${it.time?' '+it.time:''}</span>`:''}</div></div>
-        <button class="todo-del" data-a="del">✕</button></li>`;}).join('') : `<div class="empty-hint">No tasks yet — add one above ✨</div>`;
+          <div class="todo-tags"><span class="chip">${it.pri.toUpperCase()}</span>
+            ${it.category?`<span class="chip cat">${esc(it.category)}</span>`:''}
+            ${(d.tab==='all'&&lst)?`<span class="chip listc">${esc(lst.name)}</span>`:''}
+            ${it.due?`<span class="chip due ${overdue?'overdue':''}">${fmtDue(it.due)}${it.time?' · '+it.time:''}</span>`:''}
+            ${it.link?`<a class="chip link" href="${esc(it.link)}" target="_blank" rel="noopener">${ICON_LINK}Link</a>`:''}
+            ${it.file?`<button class="chip file" data-a="file">${ICON_CLIP}${esc(it.file.name)}</button>`:''}
+          </div></div>
+        <button class="todo-del" data-a="del" aria-label="delete">×</button></li>`;}).join('') : `<div class="empty-hint">No tasks here yet — add one above.</div>`;
+    body.querySelectorAll('.ttab[data-tab]').forEach(b=>{ b.onclick=()=>{ d.tab=b.dataset.tab; save(); paint(); }; if(b.dataset.tab!=='all') b.oncontextmenu=(e)=>{ e.preventDefault(); manageList(b.dataset.tab); }; });
+    body.querySelector('[data-a=addlist]').onclick=()=>{ const nm=prompt('New list name (e.g. School, Personal):'); if(!nm||!nm.trim())return; const id=uid(); d.lists.push({id,name:nm.trim()}); d.tab=id; save(); paint(); };
     ul.querySelectorAll('.todo-item').forEach(li=>{ const it=d.items.find(x=>x.id===li.dataset.id);
       li.querySelector('[data-a=toggle]').onclick=()=>{ it.done=!it.done; save(); paint(); };
       li.querySelector('[data-a=del]').onclick=()=>{ d.items=d.items.filter(x=>x.id!==it.id); save(); paint(); };
-      li.querySelector('.todo-text').onclick=()=> openTodoModal(wd,it,paint,true); });
+      li.querySelector('.todo-text').onclick=()=> openTodoModal(wd,it,paint,true);
+      const fb=li.querySelector('[data-a=file]'); if(fb) fb.onclick=()=> openFile(it.file); });
+    const inp=body.querySelector('#ti-'+wd.id);
+    const add=()=>{ const v=inp.value.trim(); if(!v)return; openTodoModal(wd,{text:v,list:(d.tab!=='all'?d.tab:'')},paint); inp.value=''; };
+    body.querySelector('[data-a=add]').onclick=add; inp.onkeydown=e=>{ if(e.key==='Enter')add(); };
   };
-  const inp=body.querySelector('#ti-'+wd.id);
-  const add=()=>{ const v=inp.value.trim(); if(!v)return; openTodoModal(wd,{text:v},paint); inp.value=''; };
-  body.querySelector('[data-a=add]').onclick=add; inp.onkeydown=e=>{ if(e.key==='Enter')add(); };
   paint();
 };
 function openTodoModal(wd,seed,paint,isEdit){
@@ -456,19 +518,31 @@ function openTodoModal(wd,seed,paint,isEdit){
   modal('Task details',`
     <label class="fld">Task</label><input id="m-text" value="${esc(seed.text||'')}"/>
     <div class="row2"><div><label class="fld">Priority</label><select id="m-pri"><option value="high">High</option><option value="med">Medium</option><option value="low">Low</option></select></div>
-    <div><label class="fld">Due date</label><input type="date" id="m-due" value="${seed.due||''}"/></div></div>
-    <label class="fld">Time (optional)</label><input type="time" id="m-time" value="${seed.time||''}"/>
-    <div class="modal-actions"><button class="btn ghost" data-x="cancel">Cancel</button><button class="btn" data-x="save">Save task</button></div>`);
+    <div><label class="fld">List</label><select id="m-list"><option value="">— none —</option>${d.lists.map(l=>`<option value="${l.id}">${esc(l.name)}</option>`).join('')}</select></div></div>
+    <div class="row2"><div><label class="fld">Due date</label><input type="date" id="m-due" value="${seed.due||''}"/></div>
+    <div><label class="fld">Time</label><input type="time" id="m-time" value="${seed.time||''}"/></div></div>
+    <label class="fld">Category (tag)</label><input id="m-cat" value="${esc(seed.category||'')}" placeholder="e.g. Homework, Chores"/>
+    <label class="fld">Link (optional)</label><input id="m-link" value="${esc(seed.link||'')}" placeholder="https://…"/>
+    <label class="fld">Attach a file (optional)</label><input type="file" id="m-file" style="padding:6px"/>
+    <div id="m-fileinfo" style="font-size:12px;font-weight:600;color:var(--ink-soft);margin-top:6px"></div>
+    <div class="modal-actions">${isEdit?'<button class="btn ghost" data-x="del" style="margin-right:auto">Delete</button>':''}<button class="btn ghost" data-x="cancel">Cancel</button><button class="btn" data-x="save">Save task</button></div>`);
   document.getElementById('m-pri').value=seed.pri||'med';
+  document.getElementById('m-list').value=seed.list||'';
+  let pendingFile=seed.file||null; const fi=document.getElementById('m-fileinfo');
+  const showFile=()=>{ fi.innerHTML=pendingFile?`Attached: ${esc(pendingFile.name)} · <button class="mini-del" id="m-rmfile">remove</button>`:''; const rm=document.getElementById('m-rmfile'); if(rm) rm.onclick=()=>{ pendingFile=null; showFile(); }; };
+  showFile();
+  document.getElementById('m-file').onchange=(e)=>{ const f=e.target.files[0]; if(!f)return; if(f.size>3*1024*1024){ alert('File too large (max 3 MB for browser storage).'); return; } const rd=new FileReader(); rd.onload=()=>{ pendingFile={name:f.name,dataUrl:rd.result}; showFile(); }; rd.readAsDataURL(f); };
   document.querySelector('[data-x=cancel]').onclick=closeModal;
+  const del=document.querySelector('[data-x=del]'); if(del) del.onclick=()=>{ d.items=d.items.filter(x=>x.id!==seed.id); save(); closeModal(); paint(); };
   document.querySelector('[data-x=save]').onclick=()=>{
     const text=document.getElementById('m-text').value.trim(); if(!text){closeModal();return;}
-    const pri=document.getElementById('m-pri').value, due=document.getElementById('m-due').value, time=document.getElementById('m-time').value;
-    if(isEdit){ seed.text=text; seed.pri=pri; seed.due=due; seed.time=time; } else d.items.push({id:uid(),text,pri,due,time,done:false});
-    save(); closeModal(); paint();
+    const rec={ text, pri:document.getElementById('m-pri').value, due:document.getElementById('m-due').value, time:document.getElementById('m-time').value, category:document.getElementById('m-cat').value.trim(), link:document.getElementById('m-link').value.trim(), list:document.getElementById('m-list').value, file:pendingFile };
+    if(isEdit){ Object.assign(seed,rec); } else d.items.push({id:uid(),done:false,...rec});
+    try{ save(); }catch(e){ alert('Could not save — the attached file may be too large for browser storage.'); }
+    closeModal(); paint();
   };
 }
-function fmtDue(iso){ const d=new Date(iso+'T00:00'); return d.toLocaleDateString(undefined,{month:'short',day:'numeric'}); }
+function fmtDue(iso){ const d=new Date(iso+'T00:00'); return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}); }
 
 /* ---------- ASSIGNMENTS ---------- */
 RENDER.assign=(body,wd)=>{
@@ -476,7 +550,7 @@ RENDER.assign=(body,wd)=>{
   const courses=[...new Set(d.items.map(i=>i.course))];
   body.innerHTML=`<div class="w-title-row"><div class="w-title-lg">${icon('assign')} Assignments</div>${d.gcConnected?'<span class="conn-badge">✓ Classroom</span>':''}</div>
     ${d.demo?`<div class="demo-note">Demo data — connect Google Classroom below to pull your real to-dos, or add your own with ＋.</div>`:''}
-    <button class="btn ghost sm block" data-a="gc-connect" style="margin-bottom:10px">${d.gcConnected?'↻ Sync Google Classroom':'🎓 Connect Google Classroom'}</button>
+    <button class="btn ghost sm block" data-a="gc-connect" style="margin-bottom:10px">${d.gcConnected?'↻ Sync Google Classroom':'Connect Google Classroom'}</button>
     <div class="assign-filter">
       <select id="af-s-${wd.id}"><option value="all">To-do (all)</option><option value="soon">Due soon</option><option value="done">Done</option></select>
       <select id="af-c-${wd.id}"><option value="all">All classes</option>${courses.map(c=>`<option>${esc(c)}</option>`).join('')}</select>
@@ -493,10 +567,10 @@ RENDER.assign=(body,wd)=>{
     if(coSel.value!=='all') items=items.filter(i=>i.course===coSel.value);
     items.sort((a,b)=>(a.due||'').localeCompare(b.due||''));
     list.innerHTML=items.length? items.map(i=>{ const soon=i.due&&i.due<=isoIn(2)&&!i.done;
-      return `<div class="assign-item ${i.done?'assign-done':''}" data-id="${i.id}"><div class="assign-ic">${i.done?'✓':'📄'}</div>
+      return `<div class="assign-item ${i.done?'assign-done':''}" data-id="${i.id}"><div class="assign-ic">${i.done?'✓':svgi(ICONS.docs,'assign-doc')}</div>
         <div class="assign-main"><div class="assign-title">${esc(i.title)}</div><div class="assign-course">${esc(i.course)}</div>
         <div class="assign-due ${soon?'soon':''}">${i.due?'Due '+fmtDue(i.due):'No due date'}</div></div>
-        <button class="todo-del" data-a="toggle">${i.done?'↩':'✓'}</button></div>`;}).join('') : `<div class="empty-hint">Nothing here 🎉</div>`;
+        <button class="todo-del" data-a="toggle">${i.done?'↩':'✓'}</button></div>`;}).join('') : `<div class="empty-hint">Nothing here</div>`;
     list.querySelectorAll('.assign-item').forEach(el=>{ const it=d.items.find(x=>x.id===el.dataset.id);
       el.querySelector('[data-a=toggle]').onclick=()=>{ it.done=!it.done; save(); paint(); }; });
   };
@@ -517,18 +591,18 @@ RENDER.weather=(body,wd)=>{
   const d=wd.data;
   body.innerHTML=`<div class="weather-wrap" id="wx-${wd.id}"><div class="empty-hint">Loading weather…</div></div>`;
   const host=body.querySelector('#wx-'+wd.id);
-  const show=(x)=>{ const [ic,desc]=WMO[x.code]||['🌡️','—'];
-    host.innerHTML=`<div class="weather-city">${esc(x.city||'Your location')}</div><div class="weather-icon">${ic}</div>
+  const show=(x)=>{ const desc=(WMO[x.code]||['','—'])[1];
+    host.innerHTML=`<div class="weather-city">${esc(x.city||'Your location')}</div><div class="weather-icon">${wIcon(x.code)}</div>
       <div class="weather-temp">${Math.round(x.temp)}°</div><div class="weather-desc">${desc}</div>
-      <div class="weather-row"><span>H ${Math.round(x.hi)}°</span><span>L ${Math.round(x.lo)}°</span><span>💨 ${Math.round(x.wind)}</span></div>
-      <button class="btn ghost sm" data-a="loc" style="margin-top:10px">📍 Change location</button>`;
+      <div class="weather-row"><span>H ${Math.round(x.hi)}°</span><span>L ${Math.round(x.lo)}°</span><span>Wind ${Math.round(x.wind)}</span></div>
+      <button class="btn ghost sm" data-a="loc" style="margin-top:10px">Change location</button>`;
     host.querySelector('[data-a=loc]').onclick=()=> askCity(wd,body); };
-  const fail=m=>{ host.innerHTML=`<div class="empty-hint">${m}</div><button class="btn ghost sm" data-a="loc">📍 Set location</button>`; host.querySelector('[data-a=loc]').onclick=()=>askCity(wd,body); };
+  const fail=m=>{ host.innerHTML=`<div class="empty-hint">${m}</div><button class="btn ghost sm" data-a="loc">Set location</button>`; host.querySelector('[data-a=loc]').onclick=()=>askCity(wd,body); };
   const fetchWx=(lat,lon,city)=> fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto`)
     .then(r=>r.json()).then(j=>{ d.cache={city:city||d.city,temp:j.current.temperature_2m,code:j.current.weather_code,wind:j.current.wind_speed_10m,hi:j.daily.temperature_2m_max[0],lo:j.daily.temperature_2m_min[0]}; save(); show(d.cache); })
     .catch(()=> d.cache?show(d.cache):fail('Could not load weather'));
   if(d.lat&&d.lon){ if(d.cache)show(d.cache); fetchWx(d.lat,d.lon,d.city); }
-  else if(navigator.geolocation) navigator.geolocation.getCurrentPosition(p=>{ d.lat=p.coords.latitude; d.lon=p.coords.longitude; save(); fetchWx(d.lat,d.lon,''); }, ()=>fail('Allow location, or set a city 📍'), {timeout:8000});
+  else if(navigator.geolocation) navigator.geolocation.getCurrentPosition(p=>{ d.lat=p.coords.latitude; d.lon=p.coords.longitude; save(); fetchWx(d.lat,d.lon,''); }, ()=>fail('Allow location, or set a city'), {timeout:8000});
   else fail('Set a city to see weather');
 };
 function askCity(wd,body){
@@ -544,7 +618,7 @@ RENDER.spotify=(body,wd)=>{
   const d=wd.data; d.playlists=d.playlists||[];
   body.innerHTML=`<div class="spotify-head"><span class="dot">♪</span><div class="w-title-lg" style="margin:0">Spotify</div>
       ${d.spConnected?'<span class="conn-badge">✓ connected</span>':''}</div>
-    <button class="btn ghost sm block" data-a="connect" style="margin-bottom:10px">${d.spConnected?'↻ Re-sync my playlists':'🎧 Log in & import my playlists'}</button>
+    <button class="btn ghost sm block" data-a="connect" style="margin-bottom:10px">${d.spConnected?'↻ Re-sync my playlists':'Log in &amp; import my playlists'}</button>
     <div class="sp-list" id="sp-${wd.id}"></div>
     <div class="sp-add"><input id="spu-${wd.id}" placeholder="…or paste a playlist / track link"/><button class="btn" data-a="add">＋</button></div>
     <div id="spe-${wd.id}"></div>`;
@@ -583,7 +657,7 @@ RENDER.calendar=(body,wd)=>{
     for(let day=1;day<=days;day++){
       const iso=`${d.viewY}-${String(d.viewM+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
       const evs=d.events.filter(e=>e.date===iso).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
-      const chips=evs.slice(0,2).map(e=>`<div class="cal-chip">${e.time?esc(e.time)+' ':''}${esc(e.title)}</div>`).join('');
+      const chips=evs.slice(0,2).map(e=>`<div class="cal-chip" data-ev="${e.id}">${e.time?esc(e.time)+' ':''}${esc(e.title)}</div>`).join('');
       const more=evs.length>2?`<div class="cal-more">+${evs.length-2} more</div>`:'';
       cells+=`<div class="cal-cell ${iso===isoIn(0)?'today':''}" data-date="${iso}"><span class="daynum">${day}</span><div class="cal-evs">${chips}${more}</div></div>`;
     }
@@ -592,19 +666,23 @@ RENDER.calendar=(body,wd)=>{
       <div class="cal-grid">${cells}</div><div class="cal-events" id="ce-${wd.id}"></div>`;
     body.querySelector('[data-n="-1"]').onclick=()=>{ d.viewM--; if(d.viewM<0){d.viewM=11;d.viewY--;} save(); paint(); };
     body.querySelector('[data-n="1"]').onclick=()=>{ d.viewM++; if(d.viewM>11){d.viewM=0;d.viewY++;} save(); paint(); };
-    body.querySelector('[data-n=add]').onclick=()=> addEvent(isoIn(0));
-    body.querySelectorAll('.cal-cell:not(.empty)').forEach(c=> c.onclick=()=> addEvent(c.dataset.date));
+    body.querySelector('[data-n=add]').onclick=()=> eventModal({date:isoIn(0)});
+    body.querySelectorAll('.cal-cell:not(.empty)').forEach(c=> c.onclick=(e)=>{ const chip=e.target.closest('.cal-chip'); if(chip){ const ev=d.events.find(x=>x.id===chip.dataset.ev); if(ev) eventModal(ev,true); return; } eventModal({date:c.dataset.date}); });
     const up=[...d.events].filter(e=>e.date>=isoIn(0)).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).slice(0,5);
-    body.querySelector('#ce-'+wd.id).innerHTML=up.length?`<div class="w-sub" style="margin-bottom:6px">Upcoming</div>`+up.map(e=>`<div class="cal-ev-item"><span><span class="dotc"></span><b>${esc(e.title)}</b> · ${fmtDue(e.date)}${e.time?' '+e.time:''}</span><button class="mini-del" data-ev="${e.id}">✕</button></div>`).join(''):'';
-    body.querySelectorAll('[data-ev]').forEach(b=> b.onclick=(ev)=>{ ev.stopPropagation(); d.events=d.events.filter(x=>x.id!==b.dataset.ev); save(); paint(); });
+    body.querySelector('#ce-'+wd.id).innerHTML=up.length?`<div class="w-sub" style="margin-bottom:6px">Upcoming</div>`+up.map(e=>`<div class="cal-ev-item" data-ev="${e.id}"><span class="cal-ev-t"><span class="dotc"></span><b>${esc(e.title)}</b> · ${fmtDue(e.date)}${e.time?' '+e.time:''}</span><button class="mini-del" data-del="${e.id}">×</button></div>`).join(''):'';
+    body.querySelectorAll('.cal-ev-item').forEach(el=>{ const ev=d.events.find(x=>x.id===el.dataset.ev); if(!ev)return;
+      el.querySelector('.cal-ev-t').onclick=()=> eventModal(ev,true);
+      el.querySelector('[data-del]').onclick=(e)=>{ e.stopPropagation(); d.events=d.events.filter(x=>x.id!==ev.id); save(); paint(); }; });
   };
-  const addEvent=(date)=>{
-    modal('Add event',`<label class="fld">Event</label><input id="e-t"/>
-      <div class="row2"><div><label class="fld">Date</label><input type="date" id="e-d" value="${date}"/></div><div><label class="fld">Time</label><input type="time" id="e-tm"/></div></div>
-      <div class="modal-actions"><button class="btn ghost" data-x="c">Cancel</button><button class="btn" data-x="s">Add event</button></div>`);
+  const eventModal=(seed,isEdit)=>{
+    modal(isEdit?'Edit event':'Add event',`<label class="fld">Event</label><input id="e-t" value="${esc(seed.title||'')}"/>
+      <div class="row2"><div><label class="fld">Date</label><input type="date" id="e-d" value="${seed.date||''}"/></div><div><label class="fld">Time</label><input type="time" id="e-tm" value="${seed.time||''}"/></div></div>
+      <div class="modal-actions">${isEdit?'<button class="btn ghost" data-x="del" style="margin-right:auto">Delete</button>':''}<button class="btn ghost" data-x="c">Cancel</button><button class="btn" data-x="s">${isEdit?'Save':'Add event'}</button></div>`);
     document.querySelector('[data-x=c]').onclick=closeModal;
+    const del=document.querySelector('[data-x=del]'); if(del) del.onclick=()=>{ d.events=d.events.filter(x=>x.id!==seed.id); save(); closeModal(); paint(); };
     document.querySelector('[data-x=s]').onclick=()=>{ const t=document.getElementById('e-t').value.trim(); if(!t){closeModal();return;}
-      d.events.push({id:uid(),title:t,date:document.getElementById('e-d').value,time:document.getElementById('e-tm').value}); save(); closeModal(); paint(); };
+      const rec={title:t,date:document.getElementById('e-d').value,time:document.getElementById('e-tm').value};
+      if(isEdit) Object.assign(seed,rec); else d.events.push({id:uid(),...rec}); save(); closeModal(); paint(); };
   };
   paint();
 };
@@ -616,7 +694,7 @@ RENDER.goals=(body,wd)=>{
     body.innerHTML=`<div class="w-title-lg">${icon('goals')} Goals</div>
       <div class="goal-tabs"><button data-t="day">DAY</button><button data-t="week">WEEK</button><button data-t="month">MONTH</button></div>
       <div class="todo-add"><input id="g-${wd.id}" placeholder="New ${d.tab} goal…"/><button class="btn" data-a="add">＋</button></div>
-      <ul class="goal-list">${list.length?list.map(g=>`<li class="goal-item ${g.done?'done':''}" data-id="${g.id}"><div class="goal-box" data-a="t">${g.done?'✓':''}</div><span>${esc(g.text)}</span><button class="mini-del" data-a="d">✕</button></li>`).join(''):`<div class="empty-hint">Set a goal for the ${d.tab} ✨</div>`}</ul>`;
+      <ul class="goal-list">${list.length?list.map(g=>`<li class="goal-item ${g.done?'done':''}" data-id="${g.id}"><div class="goal-box" data-a="t">${g.done?'✓':''}</div><span>${esc(g.text)}</span><button class="mini-del" data-a="d">✕</button></li>`).join(''):`<div class="empty-hint">Set a goal for the ${d.tab}</div>`}</ul>`;
     body.querySelectorAll('.goal-tabs button').forEach(b=>{ b.classList.toggle('active',b.dataset.t===d.tab); b.onclick=()=>{ d.tab=b.dataset.t; save(); paint(); }; });
     const inp=body.querySelector('#g-'+wd.id); const add=()=>{ const v=inp.value.trim(); if(!v)return; d[d.tab].push({id:uid(),text:v,done:false}); save(); paint(); };
     body.querySelector('[data-a=add]').onclick=add; inp.onkeydown=e=>{ if(e.key==='Enter')add(); };
@@ -634,8 +712,8 @@ RENDER.habits=(body,wd)=>{
     body.innerHTML=`<div class="w-title-lg">${icon('habits')} Habits</div><div class="todo-add"><input id="h-${wd.id}" placeholder="New habit…"/><button class="btn" data-a="add">＋</button></div><div id="hl-${wd.id}"></div>`;
     const host=body.querySelector('#hl-'+wd.id);
     host.innerHTML=d.habits.length? d.habits.map(h=>`<div class="habit-row" data-id="${h.id}"><div class="habit-top"><span class="habit-name">${esc(h.name)}</span>
-      <span class="habit-streak">🔥 ${streak(h)}d <button class="mini-del" data-a="del">✕</button></span></div>
-      <div class="habit-week">${week.map(dt=>`<div class="habit-day"><div class="dlab">${dt.lab}</div><div class="dbox ${h.days[dt.iso]?'on':''} ${dt.iso===isoIn(0)?'today':''}" data-iso="${dt.iso}"></div></div>`).join('')}</div></div>`).join('') : `<div class="empty-hint">Track a habit to build streaks 🔥</div>`;
+      <span class="habit-streak">${streak(h)}d streak <button class="mini-del" data-a="del">×</button></span></div>
+      <div class="habit-week">${week.map(dt=>`<div class="habit-day"><div class="dlab">${dt.lab}</div><div class="dbox ${h.days[dt.iso]?'on':''} ${dt.iso===isoIn(0)?'today':''}" data-iso="${dt.iso}"></div></div>`).join('')}</div></div>`).join('') : `<div class="empty-hint">Track a habit to build streaks.</div>`;
     host.querySelectorAll('.habit-row').forEach(row=>{ const h=d.habits.find(x=>x.id===row.dataset.id);
       row.querySelector('[data-a=del]').onclick=()=>{ d.habits=d.habits.filter(x=>x.id!==h.id); save(); paint(); };
       row.querySelectorAll('.dbox').forEach(bx=> bx.onclick=()=>{ h.days[bx.dataset.iso]=!h.days[bx.dataset.iso]; save(); paint(); }); });
@@ -664,7 +742,7 @@ RENDER.grades=(body,wd)=>{
     body.innerHTML=`<div class="w-title-lg">${icon('grades')} Grades</div>
       <div class="q-tabs">${QUARTERS.map(([k,l])=>`<button data-q="${k}" class="${q===k?'active':''}">${l}</button>`).join('')}</div>
       <div class="grade-overall"><div><div class="glab">${q==='all'?'Average (all quarters)':'Average · '+q.toUpperCase()}</div><div class="big">${avg==null?'—':avg.toFixed(1)+'%'}</div></div>
-        <div style="text-align:right"><div class="glab">Classes</div><div class="big">${incl.length}</div></div></div>
+        <div style="text-align:right"><div class="glab">Grade</div><div class="big">${avg==null?'—':letterFor(avg)}</div></div></div>
       <div id="gc-${wd.id}"></div>
       <button class="btn ghost block" data-a="addclass" style="margin-top:6px">＋ Add class</button>`;
     body.querySelectorAll('.q-tabs button').forEach(b=> b.onclick=()=>{ d.quarter=b.dataset.q; d.open=null; save(); paint(); });
@@ -719,10 +797,10 @@ RENDER.journal=(body,wd)=>{
   const paint=()=>{
     const e=entry();
     body.innerHTML=`<div class="w-title-row"><div class="w-title-lg">${icon('journal')} Journal</div>
-        <button class="w-gear" data-a="history" title="Mood calendar">▦</button></div>
+        <button class="w-gear" data-a="history" title="Mood calendar">${svgi('<rect x="3.5" y="4.5" width="17" height="16" rx="2.5"/><path d="M3.5 9.5h17M8 2.5v4M16 2.5v4"/>','gic')}</button></div>
       <div class="jrnl-date">${new Date(today+'T00:00').toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})}</div>
       <div class="jrnl-label">How do you feel today?</div>
-      <div class="mood-row">${MOODS.map(m=>`<button class="mood ${e.mood===m.v?'sel':''}" data-m="${m.v}" style="--mc:${m.color}" title="${m.label}"><span class="mf">${m.face}</span></button>`).join('')}</div>
+      <div class="mood-row">${MOODS.map(m=>`<button class="mood ${e.mood===m.v?'sel':''}" data-m="${m.v}" style="--mc:${m.color}" title="${m.label}">${moodSvg(m.v)}</button>`).join('')}</div>
       <div id="jt-${wd.id}"></div>
       <div class="jrnl-label">Journal</div>
       <textarea class="jrnl-text" id="jx-${wd.id}" placeholder="What's on your mind today?">${esc(e.text||'')}</textarea>`;
@@ -747,7 +825,7 @@ function journalHistory(wd){
     for(let i=0;i<sd;i++) cells+='<div></div>';
     for(let day=1;day<=days;day++){ const iso=`${vy}-${String(vm+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`; const e=d.entries[iso];
       const has=e&&e.mood; const col=has?moodColor(e.mood):'var(--card-2)';
-      cells+=`<button class="mc-cell ${iso===isoIn(0)?'today':''}" data-iso="${iso}" style="background:${col}${has?';color:#fff':''}" title="${iso}">${has?moodFace(e.mood):day}</button>`;
+      cells+=`<button class="mc-cell ${iso===isoIn(0)?'today':''}" data-iso="${iso}" style="background:${col}${has?';color:#fff':''}" title="${iso}">${has?moodSvg(e.mood):day}</button>`;
     }
     modal('Mood calendar',`<div class="mc-head"><button class="icon-btn" data-n="-1">‹</button><b>${first.toLocaleDateString(undefined,{month:'long',year:'numeric'})}</b><button class="icon-btn" data-n="1">›</button></div>
       <div class="mc-grid">${cells}</div>
@@ -762,7 +840,7 @@ function journalHistory(wd){
 function journalDay(wd,iso,back){
   const d=wd.data; const e=d.entries[iso]||(d.entries[iso]={mood:0,text:'',ratings:{}});
   modal(new Date(iso+'T00:00').toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}),`
-    <div class="jrnl-label">Mood</div><div class="mood-row" id="dm">${MOODS.map(m=>`<button class="mood ${e.mood===m.v?'sel':''}" data-m="${m.v}" style="--mc:${m.color}" title="${m.label}"><span class="mf">${m.face}</span></button>`).join('')}</div>
+    <div class="jrnl-label">Mood</div><div class="mood-row" id="dm">${MOODS.map(m=>`<button class="mood ${e.mood===m.v?'sel':''}" data-m="${m.v}" style="--mc:${m.color}" title="${m.label}">${moodSvg(m.v)}</button>`).join('')}</div>
     ${d.trackers.map(t=>`<div class="jrnl-label">${esc(t.name)}</div><div class="track-scale" data-t="${t.id}">${[1,2,3,4,5].map(n=>`<button class="ts ${(e.ratings[t.id]||0)>=n?'on':''}" data-n="${n}"></button>`).join('')}</div>`).join('')}
     <div class="jrnl-label">Journal</div><textarea class="jrnl-text" id="dtext" style="min-height:120px">${esc(e.text||'')}</textarea>
     <div class="modal-actions"><button class="btn ghost" data-x="back">‹ Calendar</button><button class="btn" data-x="save">Save</button></div>`);
@@ -777,12 +855,71 @@ function journalDay(wd,iso,back){
 RENDER.gmail=(body,wd)=>{
   const d=wd.data; d.msgs=d.msgs||[];
   body.innerHTML=`<div class="w-title-row"><div class="w-title-lg">${icon('gmail')} Gmail</div>${d.gmConnected?'<span class="conn-badge">✓ connected</span>':''}</div>
-    <button class="btn ghost sm block" data-a="connect" style="margin-bottom:10px">${d.gmConnected?'↻ Refresh inbox':'✉️ Connect Gmail'}</button>
+    <button class="btn ghost sm block" data-a="connect" style="margin-bottom:10px">${d.gmConnected?'↻ Refresh inbox':'Connect Gmail'}</button>
     <div id="gm-${wd.id}">${d.msgs.length? d.msgs.map(m=>`<a class="gm-item" href="${esc(m.link)}" target="_blank" rel="noopener">
         <div class="gm-from">${m.unread?'<i class="gm-dot"></i>':''}${esc(m.from)}<span class="gm-date">${esc(m.date)}</span></div>
         <div class="gm-subj">${esc(m.subject)}</div><div class="gm-snip">${esc(m.snippet)}</div></a>`).join('')
-      : `<div class="empty-hint">${d.gmConnected?'Inbox empty 🎉':'Connect to browse your recent emails'}</div>`}</div>`;
+      : `<div class="empty-hint">${d.gmConnected?'Inbox empty':'Connect to browse your recent emails'}</div>`}</div>`;
   body.querySelector('[data-a=connect]').onclick=()=> gmailConnect(wd,body);
+};
+
+/* ---------- CLUBS & EVENTS ---------- */
+RENDER.clubs=(body,wd)=>{
+  const d=wd.data; d.items=d.items||[];
+  const paint=()=>{
+    body.innerHTML=`<div class="w-title-row"><div class="w-title-lg">${icon('clubs')} Clubs & Events</div><button class="w-gear" data-a="add" title="Add">+</button></div>
+      ${d.items.length? d.items.map(c=>`<div class="club-card" data-id="${c.id}">
+        <div class="club-top"><div class="club-name">${esc(c.name)}</div>${c.when?`<div class="club-when">${esc(c.when)}</div>`:''}</div>
+        ${c.location?`<div class="club-meta">${esc(c.location)}</div>`:''}${c.notes?`<div class="club-notes">${esc(c.notes)}</div>`:''}</div>`).join('') : `<div class="empty-hint">Add a club or event to keep track of meetings.</div>`}`;
+    body.querySelector('[data-a=add]').onclick=()=> editClub(wd,{},paint);
+    body.querySelectorAll('.club-card').forEach(el=>{ const c=d.items.find(x=>x.id===el.dataset.id); el.onclick=()=> editClub(wd,c,paint,true); });
+  };
+  paint();
+};
+function editClub(wd,seed,paint,isEdit){ const d=wd.data;
+  modal(isEdit?'Edit club / event':'Add club / event',`
+    <label class="fld">Name</label><input id="c-n" value="${esc(seed.name||'')}"/>
+    <div class="row2"><div><label class="fld">When</label><input id="c-w" value="${esc(seed.when||'')}" placeholder="Wed · 3:30 PM"/></div>
+    <div><label class="fld">Where</label><input id="c-l" value="${esc(seed.location||'')}" placeholder="Room 204"/></div></div>
+    <label class="fld">Notes</label><textarea id="c-no" style="min-height:60px">${esc(seed.notes||'')}</textarea>
+    <div class="modal-actions">${isEdit?'<button class="btn ghost" data-x="del" style="margin-right:auto">Delete</button>':''}<button class="btn ghost" data-x="c">Cancel</button><button class="btn" data-x="s">Save</button></div>`);
+  document.querySelector('[data-x=c]').onclick=closeModal;
+  const del=document.querySelector('[data-x=del]'); if(del) del.onclick=()=>{ d.items=d.items.filter(x=>x.id!==seed.id); save(); closeModal(); paint(); };
+  document.querySelector('[data-x=s]').onclick=()=>{ const nm=document.getElementById('c-n').value.trim(); if(!nm){closeModal();return;}
+    const rec={name:nm,when:document.getElementById('c-w').value.trim(),location:document.getElementById('c-l').value.trim(),notes:document.getElementById('c-no').value.trim()};
+    if(isEdit) Object.assign(seed,rec); else d.items.push({id:uid(),...rec}); save(); closeModal(); paint(); };
+}
+
+/* ---------- DOCS (rich text, multiple documents) ---------- */
+RENDER.docs=(body,wd)=>{
+  const d=wd.data; d.docs=d.docs||[]; if(!d.docs.length){ const id=uid(); d.docs.push({id,title:'Untitled doc',html:'',updated:Date.now()}); d.active=id; }
+  if(!d.docs.some(x=>x.id===d.active)) d.active=d.docs[0].id;
+  const doc=()=> d.docs.find(x=>x.id===d.active);
+  const paint=()=>{
+    const cur=doc();
+    body.innerHTML=`<div class="w-title-row"><div class="w-title-lg">${icon('docs')} Docs</div>
+        <div style="display:flex;gap:6px;align-items:center"><select class="docs-select" id="ds-${wd.id}">${d.docs.map(x=>`<option value="${x.id}" ${x.id===d.active?'selected':''}>${esc(x.title||'Untitled')}</option>`).join('')}</select><button class="w-gear" data-a="new" title="New document">+</button></div></div>
+      <input class="docs-title" id="dt-${wd.id}" value="${esc(cur.title||'')}" placeholder="Document title"/>
+      <div class="docs-toolbar">
+        <button data-cmd="bold" title="Bold"><b>B</b></button>
+        <button data-cmd="italic" title="Italic"><i>I</i></button>
+        <button data-cmd="underline" title="Underline"><u>U</u></button>
+        <button data-block="h2" title="Heading">H</button>
+        <button data-cmd="insertUnorderedList" title="Bulleted list">•—</button>
+        <button data-cmd="insertOrderedList" title="Numbered list">1.</button>
+        <button data-del="doc" class="docs-del" title="Delete this document">Delete</button>
+      </div>
+      <div class="docs-edit" id="de-${wd.id}" contenteditable="true">${cur.html||''}</div>`;
+    const sel=body.querySelector('#ds-'+wd.id); sel.onchange=()=>{ d.active=sel.value; save(); paint(); };
+    body.querySelector('[data-a=new]').onclick=()=>{ const id=uid(); d.docs.push({id,title:'Untitled doc',html:'',updated:Date.now()}); d.active=id; save(); paint(); };
+    const titleInp=body.querySelector('#dt-'+wd.id); titleInp.oninput=()=>{ cur.title=titleInp.value; cur.updated=Date.now(); save(); const op=sel.querySelector('option[value="'+cur.id+'"]'); if(op) op.textContent=cur.title||'Untitled'; };
+    const ed=body.querySelector('#de-'+wd.id);
+    ed.oninput=()=>{ cur.html=ed.innerHTML; cur.updated=Date.now(); save(); };
+    body.querySelectorAll('.docs-toolbar [data-cmd]').forEach(b=> b.onmousedown=(e)=>{ e.preventDefault(); document.execCommand(b.dataset.cmd,false,null); ed.focus(); cur.html=ed.innerHTML; save(); });
+    body.querySelectorAll('.docs-toolbar [data-block]').forEach(b=> b.onmousedown=(e)=>{ e.preventDefault(); document.execCommand('formatBlock',false,'<'+b.dataset.block+'>'); ed.focus(); cur.html=ed.innerHTML; save(); });
+    body.querySelector('[data-del=doc]').onclick=()=>{ if(!confirm('Delete this document?'))return; d.docs=d.docs.filter(x=>x.id!==cur.id); if(!d.docs.length){ const id=uid(); d.docs.push({id,title:'Untitled doc',html:'',updated:Date.now()}); d.active=id; } else d.active=d.docs[0].id; save(); paint(); };
+  };
+  paint();
 };
 
 /* ---------- UPCOMING (aggregates due tasks / events / tests) ---------- */
@@ -796,16 +933,16 @@ function relWhen(iso,time){
 RENDER.upcoming=(body,wd)=>{
   const items=[];
   state.widgets.forEach(x=>{
-    if(x.type==='todo') (x.data.items||[]).forEach(i=>{ if(i.due&&!i.done) items.push({icon:'✅',title:i.text,date:i.due,time:i.time,kind:'Task'}); });
-    if(x.type==='assign') (x.data.items||[]).forEach(i=>{ if(i.due&&!i.done) items.push({icon:'📚',title:i.title,date:i.due,time:'',kind:i.course}); });
-    if(x.type==='calendar') (x.data.events||[]).forEach(e=>{ if(e.date>=isoIn(-1)) items.push({icon:'📅',title:e.title,date:e.date,time:e.time,kind:'Event'}); });
-    if(x.type==='tests') (x.data.items||[]).forEach(t=>{ if(t.date>=isoIn(-1)) items.push({icon:'📝',title:t.name,date:t.date,time:'',kind:t.subject||'Test'}); });
+    if(x.type==='todo') (x.data.items||[]).forEach(i=>{ if(i.due&&!i.done) items.push({ic:'todo',title:i.text,date:i.due,time:i.time,kind:'Task'}); });
+    if(x.type==='assign') (x.data.items||[]).forEach(i=>{ if(i.due&&!i.done) items.push({ic:'assign',title:i.title,date:i.due,time:'',kind:i.course}); });
+    if(x.type==='calendar') (x.data.events||[]).forEach(e=>{ if(e.date>=isoIn(-1)) items.push({ic:'calendar',title:e.title,date:e.date,time:e.time,kind:'Event'}); });
+    if(x.type==='tests') (x.data.items||[]).forEach(t=>{ if(t.date>=isoIn(-1)) items.push({ic:'tests',title:t.name,date:t.date,time:'',kind:t.subject||'Test'}); });
   });
   items.sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
   const top=items.slice(0,10);
   body.innerHTML=`<div class="w-title-lg">${icon('upcoming')} Upcoming</div>${top.length?top.map(i=>{ const r=relWhen(i.date,i.time);
-    return `<div class="assign-item"><div class="assign-ic">${i.icon}</div><div class="assign-main"><div class="assign-title">${esc(i.title)}</div><div class="assign-course">${esc(i.kind)}</div>
-      <div class="assign-due ${r.dd<=1?'soon':''}">${r.lbl} · ${fmtDue(i.date)}</div></div></div>`;}).join('') : `<div class="empty-hint">Nothing due soon — add tasks, events or tests 🎉</div>`}`;
+    return `<div class="assign-item"><div class="assign-ic">${svgi(ICONS[i.ic]||ICONS.notes,'assign-doc')}</div><div class="assign-main"><div class="assign-title">${esc(i.title)}</div><div class="assign-course">${esc(i.kind)}</div>
+      <div class="assign-due ${r.dd<=1?'soon':''}">${r.lbl} · ${fmtDue(i.date)}</div></div></div>`;}).join('') : `<div class="empty-hint">Nothing due soon — add tasks, events or tests</div>`}`;
 };
 
 /* ---------- TESTS & EXAMS (countdown + file attachments) ---------- */
@@ -817,7 +954,7 @@ RENDER.tests=(body,wd)=>{
       ${items.length?items.map(t=>{ const r=relWhen(t.date,''); const soon=r.dd<=3;
         return `<div class="test-card" data-id="${t.id}"><div class="test-top"><div><div class="assign-title">${esc(t.name)}</div><div class="assign-course">${esc(t.subject||'')}</div></div>
           <div class="test-count ${soon?'soon':''}">${r.dd<0?'past':r.dd===0?'TODAY':r.dd+'d'}</div></div>
-          <div class="test-meta">${fmtDue(t.date)}${t.files&&t.files.length?` · 📎 ${t.files.length} file${t.files.length===1?'':'s'}`:''}</div></div>`;}).join('') : `<div class="empty-hint">Add a test to start a countdown ⏳</div>`}`;
+          <div class="test-meta">${fmtDue(t.date)}${t.files&&t.files.length?` · ${t.files.length} file${t.files.length===1?'':'s'}`:''}</div></div>`;}).join('') : `<div class="empty-hint">Add a test to start a countdown.</div>`}`;
     body.querySelector('[data-a=add]').onclick=()=> openTest(wd,{files:[]},paint);
     body.querySelectorAll('.test-card').forEach(c=>{ const t=d.items.find(x=>x.id===c.dataset.id); c.onclick=()=> openTest(wd,t,paint,true); });
   };
@@ -858,7 +995,7 @@ RENDER.schedule=(body,wd)=>{
     body.innerHTML=`<div class="w-title-row"><div class="w-title-lg">${icon('schedule')} Today's Schedule</div><button class="w-gear" data-a="add" title="Add block">＋</button></div>
       <div class="sched-list">${blocks.length?blocks.map(b=>`<div class="sched-block type-${b.type||'task'}" data-id="${b.id}">
         <div class="sched-time">${esc(b.start||'')}${b.end?'–'+esc(b.end):''}</div>
-        <div class="sched-title">${esc(b.title)}</div><button class="mini-del" data-a="del">✕</button></div>`).join(''):`<div class="empty-hint">Block out your day ⏱️</div>`}</div>`;
+        <div class="sched-title">${esc(b.title)}</div><button class="mini-del" data-a="del">✕</button></div>`).join(''):`<div class="empty-hint">Block out your day.</div>`}</div>`;
     body.querySelector('[data-a=add]').onclick=()=> addBlock();
     body.querySelectorAll('.sched-block').forEach(el=>{ const b=d.blocks.find(x=>x.id===el.dataset.id);
       el.querySelector('[data-a=del]').onclick=(e)=>{ e.stopPropagation(); d.blocks=d.blocks.filter(x=>x.id!==b.id); save(); paint(); };
@@ -885,7 +1022,7 @@ RENDER.reminders=(body,wd)=>{
     body.innerHTML=`<div class="w-title-lg">${icon('reminders')} Reminders</div>
       <div class="todo-add"><input id="r-${wd.id}" placeholder="I must remember to…"/><button class="btn" data-a="add">＋</button></div>
       <ul class="goal-list">${d.items.length?d.items.map(r=>`<li class="goal-item ${r.done?'done':''}" data-id="${r.id}"><div class="goal-box" data-a="t">${r.done?'✓':''}</div>
-        <span>${esc(r.text)}${r.time?` <span class="chip">⏰ ${r.time}</span>`:''}</span><button class="mini-del" data-a="d">✕</button></li>`).join(''):`<div class="empty-hint">Add something you must not forget 🔔</div>`}</ul>`;
+        <span>${esc(r.text)}${r.time?` <span class="chip">⏰ ${r.time}</span>`:''}</span><button class="mini-del" data-a="d">✕</button></li>`).join(''):`<div class="empty-hint">Add something you must not forget.</div>`}</ul>`;
     const inp=body.querySelector('#r-'+wd.id);
     const add=()=>{ const v=inp.value.trim(); if(!v)return;
       const time=prompt('Remind at a time? (HH:MM, or leave blank)','')||'';
@@ -982,9 +1119,9 @@ RENDER.sounds=(body,wd)=>{
   const activeCount=()=>Object.values(d.sounds).filter(s=>s&&s.on).length;
   const paint=()=>{
     body.innerHTML=`<div class="w-title-row"><div class="w-title-lg">${icon('sounds')} Study Sounds</div><span class="w-sub">${activeCount()} active</span></div>
-      <div class="snd-master"><span>🔊 Master</span><input type="range" min="0" max="100" value="${Math.round(d.master*100)}" id="sm-${wd.id}"/><button class="btn sm" data-a="stopall">Stop all</button></div>
+      <div class="snd-master"><span>Master volume</span><input type="range" min="0" max="100" value="${Math.round(d.master*100)}" id="sm-${wd.id}"/><button class="btn sm" data-a="stopall">Stop all</button></div>
       <div class="snd-grid">${Object.entries(SOUND_DEF).map(([k,def])=>{ const st=d.sounds[k]||{on:false,vol:0.5};
-        return `<div class="snd-card ${st.on?'on':''}" data-k="${k}"><div class="snd-head"><span class="snd-ic">${def.icon}</span><span class="snd-name">${def.name}</span></div>
+        return `<div class="snd-card ${st.on?'on':''}" data-k="${k}"><div class="snd-head"><span class="snd-ic">${svgi(SND_ICON[k]||'','snd-svg')}</span><span class="snd-name">${def.name}</span></div>
           <input type="range" class="snd-vol" min="0" max="100" value="${Math.round((st.vol==null?0.5:st.vol)*100)}" data-k="${k}" ${st.on?'':'disabled'}/></div>`;}).join('')}</div>`;
     if(AE.master) AE.master.gain.value=d.master;
     body.querySelector('#sm-'+wd.id).oninput=(e)=>{ d.master=e.target.value/100; if(AE.master)AE.master.gain.value=d.master; save(); };
@@ -1247,12 +1384,79 @@ async function gmailFetch(wd,body){
   }catch(e){ alert('Gmail failed: '+e.message+'\n(Enable the Gmail API in your Google Cloud project and add the gmail.readonly scope to the OAuth consent screen.)'); }
 }
 
+/* ============================================================ BACKEND — login + cloud sync (Firebase)
+   Client-side Firebase (Auth + Firestore). Config is public-safe. Needs http(s) origin. */
+const FB_SDK='https://www.gstatic.com/firebasejs/10.12.2/';
+function fbConfig(){ const raw=localStorage.getItem('sd.fbConfig'); if(!raw) return null; try{ return JSON.parse(raw); }catch(e){ try{ return (new Function('return ('+raw+')'))(); }catch(e2){ return null; } } }
+function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=src; s.onload=res; s.onerror=()=>rej(new Error('Could not load '+src)); document.head.appendChild(s); }); }
+async function loadFirebase(){ if(window.firebase && window.firebase.firestore) return; await loadScript(FB_SDK+'firebase-app-compat.js'); await loadScript(FB_SDK+'firebase-auth-compat.js'); await loadScript(FB_SDK+'firebase-firestore-compat.js'); }
+async function fbInit(){ const cfg=fbConfig(); if(!cfg) return false; await loadFirebase();
+  if(!firebase.apps.length) firebase.initializeApp(cfg);
+  fb.auth=firebase.auth(); fb.db=firebase.firestore();
+  fb.auth.onAuthStateChanged(async(user)=>{ fb.user=user; updateAccountBtn(); if(user) await fbPull(); });
+  return true; }
+async function fbEnsure(){ if(!fb.auth){ const ok=await fbInit(); if(!ok){ fbSetup(); throw new Error('no config'); } } }
+async function fbPull(){ if(!fb.user||!fb.db) return;
+  try{ const doc=await fb.db.collection('users').doc(fb.user.uid).get();
+    if(doc.exists && doc.data() && doc.data().state){ state=migrate(doc.data().state); try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} renderBoard(); }
+    else { fbPush(); } }catch(e){ console.error('cloud pull failed', e); } }
+async function fbPush(){ if(!fb.user||!fb.db) return; try{ await fb.db.collection('users').doc(fb.user.uid).set({ state, updated:Date.now() }); }catch(e){ console.error('cloud save failed', e); } }
+function updateAccountBtn(){ const b=document.getElementById('accountBtn'); if(!b) return; b.textContent = fb.user? (fb.user.email? fb.user.email.split('@')[0] : 'Account') : 'Sign in'; b.classList.toggle('active', !!fb.user); }
+
+function accountClick(){ if(!servedOverHttp()) return needServerAlert(); if(!fbConfig()) return fbSetup(); if(fb.user) return accountMenu(); fbSignInMenu(); }
+function fbSetup(){
+  modal('Turn on sync & login (Firebase)',`
+    <p style="font-weight:600;color:var(--ink-soft);line-height:1.5;font-size:12.5px">One-time free setup so your board saves to your account and syncs across devices:</p>
+    <ol style="font-size:12.5px;line-height:1.6;padding-left:18px;font-weight:500">
+      <li>Open <b>console.firebase.google.com</b> → create a project (or use your existing one).</li>
+      <li><b>Build → Authentication → Get started</b>; enable <b>Google</b> and/or <b>Email/Password</b>. Under <b>Settings → Authorized domains</b> add <code>${esc(location.hostname)}</code>.</li>
+      <li><b>Build → Firestore Database → Create</b> (production mode). In <b>Rules</b> paste:<br><code style="display:block;white-space:pre-wrap;background:var(--card-2);padding:6px 8px;border-radius:8px;margin-top:4px">match /users/{uid} {\n  allow read, write: if request.auth != null && request.auth.uid == uid;\n}</code></li>
+      <li>Project settings → <b>Your apps → Web</b> → register, copy the <b>firebaseConfig</b> object and paste it below.</li>
+    </ol>
+    <label class="fld">firebaseConfig (paste the whole { … } object)</label>
+    <textarea id="fb-cfg" style="min-height:120px;font-family:ui-monospace,monospace;font-size:12px">${esc(localStorage.getItem('sd.fbConfig')||'')}</textarea>
+    <div class="modal-actions"><button class="btn ghost" data-x="c">Cancel</button><button class="btn" data-x="s">Save &amp; continue</button></div>`);
+  document.querySelector('[data-x=c]').onclick=closeModal;
+  document.querySelector('[data-x=s]').onclick=async()=>{ const raw=document.getElementById('fb-cfg').value.trim(); if(!raw){closeModal();return;}
+    let cfg=null; try{ cfg=JSON.parse(raw); }catch(e){ try{ cfg=(new Function('return ('+raw+')'))(); }catch(e2){} }
+    if(!cfg||!cfg.apiKey||!cfg.projectId){ alert('That doesn\'t look like a Firebase config (needs apiKey and projectId).'); return; }
+    localStorage.setItem('sd.fbConfig', JSON.stringify(cfg)); fb.auth=null; fb.db=null;
+    try{ await fbInit(); }catch(e){} closeModal(); fbSignInMenu(); };
+}
+function fbSignInMenu(){
+  modal('Sign in',`
+    <button class="btn block" data-x="google">Continue with Google</button>
+    <div style="text-align:center;font-size:11px;color:var(--ink-soft);margin:12px 0;font-weight:700">— or with email —</div>
+    <label class="fld">Email</label><input id="fb-e" type="email" autocomplete="username"/>
+    <label class="fld">Password</label><input id="fb-p" type="password" autocomplete="current-password"/>
+    <div style="font-size:11px;color:var(--ink-soft);font-weight:600;margin-top:6px"><a href="#" data-x="cfg" style="color:var(--accent-dark)">Re-enter Firebase config</a></div>
+    <div class="modal-actions"><button class="btn ghost" data-x="new">Create account</button><button class="btn" data-x="in">Sign in</button></div>`);
+  const v=(id)=>document.getElementById(id).value.trim();
+  document.querySelector('[data-x=google]').onclick=()=> fbSignInGoogle();
+  document.querySelector('[data-x=in]').onclick=()=> fbSignInEmail(v('fb-e'),document.getElementById('fb-p').value,false);
+  document.querySelector('[data-x=new]').onclick=()=> fbSignInEmail(v('fb-e'),document.getElementById('fb-p').value,true);
+  document.querySelector('[data-x=cfg]').onclick=(e)=>{ e.preventDefault(); fbSetup(); };
+}
+async function fbSignInGoogle(){ try{ await fbEnsure(); const p=new firebase.auth.GoogleAuthProvider(); await fb.auth.signInWithPopup(p); closeModal(); }catch(e){ if(e.message!=='no config') alert('Sign-in failed: '+e.message); } }
+async function fbSignInEmail(email,pass,isNew){ if(!email||!pass){ alert('Enter an email and password.'); return; }
+  try{ await fbEnsure(); if(isNew) await fb.auth.createUserWithEmailAndPassword(email,pass); else await fb.auth.signInWithEmailAndPassword(email,pass); closeModal(); }catch(e){ if(e.message!=='no config') alert(e.message); } }
+function accountMenu(){
+  modal('Account',`<p style="font-weight:700;font-size:14px">Signed in as ${esc(fb.user.email||fb.user.uid)}</p>
+    <p style="font-size:12px;color:var(--ink-soft);font-weight:600;line-height:1.5">Your board syncs to the cloud automatically and loads on any device you sign in on.</p>
+    <div class="modal-actions"><button class="btn ghost" data-x="out">Sign out</button><button class="btn" data-x="c">Done</button></div>`);
+  document.querySelector('[data-x=c]').onclick=closeModal;
+  document.querySelector('[data-x=out]').onclick=async()=>{ try{ await fb.auth.signOut(); }catch(e){} closeModal(); updateAccountBtn(); };
+}
+const _accBtn=document.getElementById('accountBtn'); if(_accBtn) _accBtn.onclick=accountClick;
+
 /* ============================================================ UTIL / BOOT */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 let rzTimer; window.addEventListener('resize',()=>{ clearTimeout(rzTimer); rzTimer=setTimeout(renderBoard,150); });
 (async()=>{
   applyTheme();
   const returned = servedOverHttp() ? await spotifyHandleRedirect() : false;
-  if(returned && spotifyConnected()){ const spW=state.widgets.find(x=>x.type==='spotify'); if(spW){ const list=await spFetchPlaylists(); if(list){ mergePlaylists(spW,list); spW.data.spConnected=true; save(); } } }
+  if(returned && spotifyConnected()){ const spW=state.widgets.find(x=>x.type==='spotify'); if(spW){ const list=await spFetchPlaylists(); if(list&&list!=='premium'){ mergePlaylists(spW,list); spW.data.spConnected=true; save(); } } }
   renderBoard();
+  updateAccountBtn();
+  if(servedOverHttp() && fbConfig()){ fbInit().catch(()=>{}); }
 })();

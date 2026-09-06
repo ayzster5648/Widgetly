@@ -18,7 +18,26 @@ Just **double-click `index.html`** — it runs in any browser, no install needed
 Flip Clock (two big tiles) · Focus Timer (Pomodoro / Timer / Stopwatch, editable lengths, plays a sound) · To-Do List (priority + due date/time shown on each task) ·
 Assignments (Google-Classroom-style filters) · Weather · Spotify · Calendar (events show as day tabs like Google Calendar) ·
 Goals (day/week/month) · Habit Tracker (weekly + streaks) · Grade Calculator · Quick Notes ·
-**Upcoming** · **Tests & Exams** · **Daily Schedule** · **Reminders** · **Daily Quote** · **Alarms** · **Study Sounds** · **Journal & Mood** · **Gmail**.
+**Upcoming** · **Tests & Exams** · **Daily Schedule** · **Reminders** · **Daily Quote** · **Alarms** · **Study Sounds** · **Journal & Mood** · **Gmail** · **Clubs & Events** · **Docs**.
+
+## Login & cloud sync (your account)
+Click **Sign in** (top-right). Your board saves to your account and **syncs across devices** — this needs a free **Firebase** backend (one-time setup, and you must be on the hosted https site, not a file):
+1. At **console.firebase.google.com**, create a project (or reuse one).
+2. **Authentication → Get started**, enable **Google** and/or **Email/Password**. Under **Settings → Authorized domains**, add your site's domain (e.g. `ayzster5648.github.io`).
+3. **Firestore Database → Create** (production). In **Rules**, allow each user their own doc:
+   ```
+   match /users/{uid} { allow read, write: if request.auth != null && request.auth.uid == uid; }
+   ```
+4. **Project settings → Your apps → Web**, register an app, copy the **firebaseConfig** object, and paste it into the Sign-in setup box.
+Then sign in with Google or email. Your data loads automatically on any device you sign in on. (Signed out, it still saves locally in that browser.)
+
+## More widgets
+- **To-Do List** — now has **tabs/lists** (All + your own like School/Personal; the **+** adds one, right-click a list tab to rename/delete). Each task can have a **category tag**, a **link**, and a **file attachment**, plus priority and a due date that shows the **day of the week**.
+- **Journal & Mood** — daily mood (now drawn as faces, not emoji), journal, custom "rate anything" trackers, and a **mood calendar**.
+- **Clubs & Events** — track clubs/activities with when, where, and notes; click one to edit.
+- **Docs** — a mini Google-Docs: multiple documents you can switch between (the dropdown lists **past docs you've made**), a title, and a formatting toolbar (bold/italic/underline/heading/lists). **+** starts a new doc.
+- **Grades** now shows an overall **letter grade** next to the average.
+- **Calendar** events are **editable** — click an event (in a day or the Upcoming list) to change or delete it.
 
 ## Journal & Mood
 Each day: pick how you felt (5 moods), write a journal entry, and rate anything you want to track — the **Rate your day** slider is there by default, and **＋ Track something** adds your own (Sleep, Stress, Productivity…). Click the **▦** button for a **mood calendar**: a month grid coloured by how you felt each day — tap any day to read or edit that day's entry.
